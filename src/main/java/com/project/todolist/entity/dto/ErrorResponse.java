@@ -19,13 +19,12 @@ public class ErrorResponse {
 
     private LocalDateTime timestamp;
 
-    private List<ValidationError> error;
+    private List<ValidationError> errors;
 
     public ErrorResponse(HttpStatus status, String message, LocalDateTime timestamp){
         this.status = status;
         this.message = message;
         this.timestamp = timestamp;
     }
-
 
 }
