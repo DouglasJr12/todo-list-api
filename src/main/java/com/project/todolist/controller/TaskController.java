@@ -1,8 +1,10 @@
 package com.project.todolist.controller;
 
 
+import com.project.todolist.dto.TaskResponse;
 import com.project.todolist.entity.TaskEntity;
 import com.project.todolist.dto.TaskRequest;
+import com.project.todolist.mapper.TaskMapper;
 import com.project.todolist.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -16,29 +18,31 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService service;
+    private final TaskMapper mapper;
 
-    public TaskController(TaskService service) {
+    public TaskController(TaskService service, TaskMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @PostMapping
-    public TaskEntity criarTask(@Valid @RequestBody TaskRequest request) {
-        return service.criarTask(request);
+    public TaskResponse criarTask(@Valid @RequestBody TaskRequest request) {
+        return mapper.toTaskResponse(service.criarTask(request));
     }
 
     @PatchMapping("/{id}/favorite/{favorite}")
-    public TaskEntity alterarFavorito(@PathVariable Long id, @PathVariable boolean favorite){
-        return  service.atualizarFavorito(id, favorite);
+    public TaskResponse alterarFavorito(@PathVariable Long id, @PathVariable boolean favorite){
+        return  mapper .toTaskResponse(service.atualizarFavorito(id, favorite));
     }
 
     @PatchMapping("/{id}/concluir")
-    public TaskEntity concluirTask(@PathVariable Long id){
-        return service.concluirTask(id);
+    public TaskResponse concluirTask(@PathVariable Long id){
+        return mapper.toTaskResponse(service.concluirTask(id));
     }
 
     @PatchMapping("/{id}/cancelar")
-    public TaskEntity cancelarTask(@PathVariable Long id){
-        return service.cancelarTask(id);
+    public TaskResponse cancelarTask(@PathVariable Long id){
+        return mapper.toTaskResponse(service.cancelarTask(id));
     }
 
     @GetMapping
@@ -47,13 +51,13 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public TaskEntity buscaTaskPorId(@PathVariable Long id){
-        return service.obterTaskPorId(id);
+    public TaskResponse buscaTaskPorId(@PathVariable Long id){
+        return mapper.toTaskResponse(service.obterTaskPorId(id));
     }
 
     @PutMapping("/{id}")
-    public TaskEntity atualizarTask(@PathVariable Long id, @RequestBody TaskRequest request) {
-        return service.atualizarTask(id, request);
+    public TaskResponse atualizarTask(@PathVariable Long id, @RequestBody TaskRequest request) {
+        return mapper.toTaskResponse(service.atualizarTask(id, request));
     }
 
     @DeleteMapping("/{id}")

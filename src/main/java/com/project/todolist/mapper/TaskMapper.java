@@ -34,8 +34,6 @@ public class TaskMapper {
         response.setDeadLine(entity.getDeadline());
         response.setStatus(entity.getStatus());
 
-
-
         return response;
     }
 

@@ -15,10 +15,11 @@ import java.util.List;
 @Service
 public class TaskService {
     private final TaskRepository repository;
-    private TaskMapper taskMapper;
+    private TaskMapper mapper;
 
-    public TaskService(TaskRepository repository) {
+    public TaskService(TaskRepository repository, TaskMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     private TaskEntity buscarTaskPorId(Long id) {
@@ -30,7 +31,7 @@ public class TaskService {
     }
 
     public TaskEntity criarTask(TaskRequest request) {
-        TaskEntity task = taskMapper.toTask(request);
+        TaskEntity task = mapper.toTask(request);
         return repository.save(task);
     }
 
