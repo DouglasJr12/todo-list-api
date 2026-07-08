@@ -2,7 +2,7 @@ package com.project.todolist.controller;
 
 
 import com.project.todolist.entity.TaskEntity;
-import com.project.todolist.entity.dto.TaskDto;
+import com.project.todolist.dto.TaskRequest;
 import com.project.todolist.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskEntity criarTask(@Valid @RequestBody TaskDto dto) {
-        return service.criarTask(dto);
+    public TaskEntity criarTask(@Valid @RequestBody TaskRequest request) {
+        return service.criarTask(request);
     }
 
     @PatchMapping("/{id}/favorite/{favorite}")
@@ -52,8 +52,8 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public TaskEntity atualizarTask(@PathVariable Long id, @RequestBody TaskDto dto) {
-        return service.atualizarTask(id, dto);
+    public TaskEntity atualizarTask(@PathVariable Long id, @RequestBody TaskRequest request) {
+        return service.atualizarTask(id, request);
     }
 
     @DeleteMapping("/{id}")

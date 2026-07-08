@@ -1,4 +1,4 @@
-package com.project.todolist.entity.enums;
+package com.project.todolist.enums;
 
 public enum StatusEnum {
     CONCLUIDA, PENDENTE, CANCELADO

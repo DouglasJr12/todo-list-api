@@ -1,7 +1,7 @@
 package com.project.todolist.exceptions;
 
-import com.project.todolist.entity.dto.ErrorResponse;
-import com.project.todolist.entity.dto.ValidationError;
+import com.project.todolist.dto.ErrorResponse;
+import com.project.todolist.dto.ValidationError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

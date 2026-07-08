@@ -1,7 +1,6 @@
-package com.project.todolist.entity;
+package com.project.todolist.dto;
 
 import com.project.todolist.enums.StatusEnum;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,31 +9,22 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+public class TaskResponse {
 
-
-public class TaskEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
 
-    private String description;
-
     private LocalDateTime dateCreate;
 
-    private LocalDateTime deadline;
+    private LocalDateTime deadLine;
 
-    @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
-    private boolean favorite;
 
 
 }
