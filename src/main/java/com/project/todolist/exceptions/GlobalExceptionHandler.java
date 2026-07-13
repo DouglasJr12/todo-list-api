@@ -40,6 +40,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleTaskAlreadyCancelled(TaskAlreadyCancelledException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponseBuild(HttpStatus.CONFLICT, exception.getMessage()));
     }
+    @ExceptionHandler(TaskCannotBeUpdatedException.class)
+    public ResponseEntity<ErrorResponse> handleTaskCannotBeAllowed(TaskCannotBeUpdatedException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponseBuild(HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidDeadlineException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidDeadline(InvalidDeadlineException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseBuild(HttpStatus.BAD_REQUEST,exception.getMessage()));
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> inRequestValidationException(MethodArgumentNotValidException requestErrorValidation) {

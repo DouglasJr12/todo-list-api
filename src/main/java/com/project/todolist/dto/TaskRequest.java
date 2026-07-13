@@ -23,12 +23,12 @@ public class TaskRequest {
     @Size(max = 500)
     private String descricao;
 
-    @NotNull
+
     private LocalDateTime dataCreate;
 
     @NotNull
     @FutureOrPresent(message = "Data limite deve ser hoje ou no futuro.")
-    private LocalDateTime dataLimite;
+    private LocalDateTime deadline;
 
 
 

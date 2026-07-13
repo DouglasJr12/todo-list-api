@@ -1,12 +1,12 @@
 package com.project.todolist.controller;
 
 
-import com.project.todolist.dto.TaskResponse;
-import com.project.todolist.entity.TaskEntity;
 import com.project.todolist.dto.TaskRequest;
+import com.project.todolist.dto.TaskResponse;
 import com.project.todolist.mapper.TaskMapper;
 import com.project.todolist.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,38 +26,45 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskResponse criarTask(@Valid @RequestBody TaskRequest request) {
-        return mapper.toTaskResponse(service.criarTask(request));
-    }
-
-    @PatchMapping("/{id}/favorite/{favorite}")
-    public TaskResponse alterarFavorito(@PathVariable Long id, @PathVariable boolean favorite){
-        return  mapper .toTaskResponse(service.atualizarFavorito(id, favorite));
-    }
-
-    @PatchMapping("/{id}/concluir")
-    public TaskResponse concluirTask(@PathVariable Long id){
-        return mapper.toTaskResponse(service.concluirTask(id));
-    }
-
-    @PatchMapping("/{id}/cancelar")
-    public TaskResponse cancelarTask(@PathVariable Long id){
-        return mapper.toTaskResponse(service.cancelarTask(id));
+    public ResponseEntity<TaskResponse> criarTask(@Valid @RequestBody TaskRequest request) {
+        TaskResponse response = mapper.toTaskResponse(service.criarTask(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response) ;
     }
 
     @GetMapping
-    public List<TaskEntity> listarTask() {
-        return service.listarTudo();
+    public ResponseEntity<List<TaskResponse>> listarTask() {
+        List<TaskResponse> responses = mapper.toTaskResponseList(service.listarTudo());
+        return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{id}")
-    public TaskResponse buscaTaskPorId(@PathVariable Long id){
-        return mapper.toTaskResponse(service.obterTaskPorId(id));
+    public ResponseEntity<TaskResponse> buscaTaskPorId(@PathVariable Long id){
+        TaskResponse response = mapper.toTaskResponse(service.obterTaskPorId(id));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public TaskResponse atualizarTask(@PathVariable Long id, @RequestBody TaskRequest request) {
-        return mapper.toTaskResponse(service.atualizarTask(id, request));
+    public ResponseEntity<TaskResponse> atualizarTask(@PathVariable Long id, @RequestBody TaskRequest request) {
+        TaskResponse response = mapper.toTaskResponse(service.atualizarTask(id, request));
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/favorite/{favorite}")
+    public ResponseEntity<TaskResponse> alterarFavorito(@PathVariable Long id, @PathVariable boolean favorite){
+        TaskResponse response = mapper .toTaskResponse(service.atualizarFavorito(id, favorite));
+        return  ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/concluir")
+    public ResponseEntity<TaskResponse> concluirTask(@PathVariable Long id){
+        TaskResponse response = mapper.toTaskResponse(service.concluirTask(id));
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<TaskResponse> cancelarTask(@PathVariable Long id){
+        TaskResponse response = mapper.toTaskResponse(service.cancelarTask(id));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

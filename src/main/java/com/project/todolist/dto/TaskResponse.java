@@ -25,6 +25,8 @@ public class TaskResponse {
 
     private StatusEnum status;
 
+    private boolean favorite;
+
 
 
 }

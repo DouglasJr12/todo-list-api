@@ -3,23 +3,32 @@ package com.project.todolist.service;
 import com.project.todolist.dto.TaskRequest;
 import com.project.todolist.entity.TaskEntity;
 import com.project.todolist.enums.StatusEnum;
-import com.project.todolist.exceptions.TaskAlreadyCancelledException;
-import com.project.todolist.exceptions.TaskAlreadyCompletedException;
-import com.project.todolist.exceptions.TaskNotFoundException;
+import com.project.todolist.exceptions.*;
 import com.project.todolist.mapper.TaskMapper;
 import com.project.todolist.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class TaskService {
     private final TaskRepository repository;
-    private TaskMapper mapper;
+    private final TaskMapper mapper;
 
     public TaskService(TaskRepository repository, TaskMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
+    }
+
+    private void validarDataLimite(LocalDateTime deadline) {
+        LocalDateTime agora = LocalDateTime.now();
+        LocalDateTime limite = agora.plusYears(1);
+
+        if (deadline.isAfter(limite) || deadline.isBefore(agora)) {
+            throw new InvalidDeadlineException();
+        }
+
     }
 
     private TaskEntity buscarTaskPorId(Long id) {
@@ -31,7 +40,10 @@ public class TaskService {
     }
 
     public TaskEntity criarTask(TaskRequest request) {
+
         TaskEntity task = mapper.toTask(request);
+        validarDataLimite(task.getDeadline());
+
         return repository.save(task);
     }
 
@@ -43,11 +55,20 @@ public class TaskService {
         return tasks;
     }
 
-    public TaskEntity atualizarTask(long id, TaskRequest dto) {
+    public TaskEntity atualizarTask(long id, TaskRequest request) {
         TaskEntity task = buscarTaskPorId(id);
-        task.setTitle(dto.getTitulo());
-        task.setDescription(dto.getDescricao());
-        task.setDeadline(dto.getDataLimite());
+        StatusEnum status = task.getStatus();
+
+        if (status != StatusEnum.PENDENTE) {
+            throw new TaskCannotBeUpdatedException();
+        }
+
+        validarDataLimite(request.getDeadline());
+
+        task.setTitle(request.getTitulo());
+        task.setDescription(request.getDescricao());
+        task.setDeadline(request.getDeadline());
+
         return repository.save(task);
     }
 

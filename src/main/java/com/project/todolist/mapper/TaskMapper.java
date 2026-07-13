@@ -8,6 +8,8 @@ import com.project.todolist.enums.StatusEnum;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
@@ -19,7 +21,8 @@ public class TaskMapper {
         entity.setTitle(request.getTitulo());
         entity.setDescription(request.getDescricao());
         entity.setDateCreate(LocalDateTime.now());
-        entity.setDeadline(request.getDataLimite());
+        entity.setDeadline(request.getDeadline());
+        entity.setFavorite(false);
         entity.setStatus(StatusEnum.PENDENTE);
 
         return entity;
@@ -33,9 +36,17 @@ public class TaskMapper {
         response.setDateCreate(entity.getDateCreate());
         response.setDeadLine(entity.getDeadline());
         response.setStatus(entity.getStatus());
+        response.setFavorite(entity.isFavorite());
 
         return response;
     }
+
+    public List<TaskResponse> toTaskResponseList(List<TaskEntity> entities){
+        return entities.stream().map(this::toTaskResponse).toList();
+
+    }
+
+
 
 
 
