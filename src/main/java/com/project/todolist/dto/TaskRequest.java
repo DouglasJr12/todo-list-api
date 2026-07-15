@@ -17,14 +17,11 @@ public class TaskRequest {
 
     @NotBlank(message = "Titulo da tarefa é obrigatório")
     @Size(min = 6, max = 40)
-    private String titulo;
+    private String title;
 
     @NotBlank(message = "Descrição obrigatória")
     @Size(max = 500)
-    private String descricao;
-
-
-    private LocalDateTime dataCreate;
+    private String description;
 
     @NotNull
     @FutureOrPresent(message = "Data limite deve ser hoje ou no futuro.")

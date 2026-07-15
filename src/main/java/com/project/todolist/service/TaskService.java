@@ -21,89 +21,89 @@ public class TaskService {
         this.mapper = mapper;
     }
 
-    private void validarDataLimite(LocalDateTime deadline) {
-        LocalDateTime agora = LocalDateTime.now();
-        LocalDateTime limite = agora.plusYears(1);
+    private void validateDeadline(LocalDateTime deadline) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime limit = now.plusYears(1);
 
-        if (deadline.isAfter(limite) || deadline.isBefore(agora)) {
+        if (deadline.isAfter(limit) || deadline.isBefore(now)) {
             throw new InvalidDeadlineException();
         }
 
     }
 
-    private TaskEntity buscarTaskPorId(Long id) {
+    private TaskEntity findTaskById(Long id) {
         return repository.findById(id).orElseThrow(() -> new TaskNotFoundException());
     }
 
-    public TaskEntity obterTaskPorId(Long id) {
-        return buscarTaskPorId(id);
+    public TaskEntity getTaskById(Long id) {
+        return findTaskById(id);
     }
 
-    public TaskEntity criarTask(TaskRequest request) {
+    public TaskEntity createTask(TaskRequest request) {
 
-        TaskEntity task = mapper.toTask(request);
-        validarDataLimite(task.getDeadline());
+        TaskEntity task = mapper.toEntity(request);
+        validateDeadline(task.getDeadline());
 
         return repository.save(task);
     }
 
-    public List<TaskEntity> listarTudo() {
+    public List<TaskEntity> findAll() {
         List<TaskEntity> tasks = repository.findAll();
         if (tasks.isEmpty()) {
-            throw new TaskNotFoundException();
+            return repository.findAll();
         }
         return tasks;
     }
 
-    public TaskEntity atualizarTask(long id, TaskRequest request) {
-        TaskEntity task = buscarTaskPorId(id);
+    public TaskEntity updateTask(long id, TaskRequest request) {
+        TaskEntity task = findTaskById(id);
         StatusEnum status = task.getStatus();
 
-        if (status != StatusEnum.PENDENTE) {
+        if (status != StatusEnum.PENDING) {
             throw new TaskCannotBeUpdatedException();
         }
 
-        validarDataLimite(request.getDeadline());
+        validateDeadline(request.getDeadline());
 
-        task.setTitle(request.getTitulo());
-        task.setDescription(request.getDescricao());
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
         task.setDeadline(request.getDeadline());
 
         return repository.save(task);
     }
 
-    public void deletarTask(Long id) {
-        TaskEntity task = buscarTaskPorId(id);
+    public void deleteTask(Long id) {
+        TaskEntity task = findTaskById(id);
         repository.delete(task);
     }
 
-    public TaskEntity atualizarFavorito(Long taskID, boolean favorito) {
-        TaskEntity task = buscarTaskPorId(taskID);
+    public TaskEntity updateFavoriteStatus(Long taskId, boolean favorito) {
+        TaskEntity task = findTaskById(taskId);
         task.setFavorite(favorito);
         return repository.save(task);
     }
 
-    public TaskEntity concluirTask(Long id) {
-        TaskEntity task = buscarTaskPorId(id);
+    public TaskEntity completeTask(Long id) {
+        TaskEntity task = findTaskById(id);
         StatusEnum status = task.getStatus();
-        if (status == StatusEnum.CANCELADO) {
+        if (status == StatusEnum.CANCELED) {
             throw new TaskAlreadyCancelledException();
-        } else if (status == StatusEnum.CONCLUIDA) {
+        } else if (status == StatusEnum.COMPLETED) {
             throw new TaskAlreadyCompletedException();
         }
-        task.setStatus(StatusEnum.CONCLUIDA);
+        task.setStatus(StatusEnum.COMPLETED);
         return repository.save(task);
     }
 
-    public TaskEntity cancelarTask(Long id) {
-        TaskEntity task = buscarTaskPorId(id);
+    public TaskEntity cancelTask(Long id) {
+        TaskEntity task = findTaskById(id);
         StatusEnum status = task.getStatus();
-        if (status == StatusEnum.CONCLUIDA) {
+        if (status == StatusEnum.COMPLETED) {
             throw new TaskAlreadyCompletedException();
-        } else if (status == StatusEnum.CANCELADO) {
+        } else if (status == StatusEnum.CANCELED) {
             throw new TaskAlreadyCancelledException();
         }
-        task.setStatus(StatusEnum.CANCELADO);
+        task.setStatus(StatusEnum.CANCELED);
         return repository.save(task);
     }
 }

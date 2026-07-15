@@ -27,7 +27,7 @@ public class TaskEntity {
 
     private String description;
 
-    private LocalDateTime dateCreate;
+    private LocalDateTime createdAt;
 
     private LocalDateTime deadline;
 
@@ -35,6 +35,5 @@ public class TaskEntity {
     private StatusEnum status;
 
     private boolean favorite;
-
 
 }

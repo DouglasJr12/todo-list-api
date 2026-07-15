@@ -19,9 +19,9 @@ public class TaskResponse {
 
     private String title;
 
-    private LocalDateTime dateCreate;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime deadLine;
+    private LocalDateTime deadline;
 
     private StatusEnum status;
 
